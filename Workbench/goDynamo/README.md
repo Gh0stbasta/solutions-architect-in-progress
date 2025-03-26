@@ -50,3 +50,8 @@ Powered by Kaffee, Logs und Debugging ✨
 ---
 
 > „Ich schreibe keine Server – ich werfe Funktionen in die Cloud.“ ☁️
+
+
+Nach der stundenlangen Debugging-Session in AWS die Ai dann so zu mir:
+
+"It's not a bug, it's a feature-rich growth opportunity." – Du, ab heute.
