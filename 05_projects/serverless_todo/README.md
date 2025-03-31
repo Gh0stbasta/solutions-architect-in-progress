@@ -9,7 +9,19 @@ This project is a simple yet fully functional **serverless Todo API**, built wit
 
 ## 📊 Architecture Diagram
 
-![UML](assets/serverless_todo_api_uml.png)
+```mermaid
+graph TB
+  Client[Client]
+  APIGW[API Gateway]
+  Lambda[AWS Lambda<br>todo-handler.js]
+  Dynamo[DynamoDB<br>Todos Table]
+  Logs[CloudWatch<br>Logs & Errors]
+
+  Client -->|HTTPS Request| APIGW
+  APIGW -->|Trigger| Lambda
+  Lambda -->|Read/Write| Dynamo
+  Lambda -->|Logs| Logs
+```
 
 ---
 
