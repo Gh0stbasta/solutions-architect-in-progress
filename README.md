@@ -1,6 +1,6 @@
 # ☁️ Path to SAA – My SkillPilot Journey
 
-Welcome aboard! This repository documents my personal learning path towards becoming an AWS Certified Solutions Architect Associate (SAA). It's my **SkillPilot system** (-Learning with AI) in action: practical, focused, and designed for long-term impact.
+Welcome aboard! This repository documents my personal learning path towards becoming an AWS Certified Solutions Architect Associate (SAA). It's my **SkillPilot system** in action: practical, focused, and designed for long-term impact.
 
 ---
 
