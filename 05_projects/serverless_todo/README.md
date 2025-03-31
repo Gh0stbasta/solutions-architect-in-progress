@@ -7,18 +7,15 @@ This project is a simple yet fully functional **serverless Todo API**, built wit
 - ✅ API Gateway
 - ✅ Testable via cURL or Postman
 
-
 ## 📊 Architecture Diagram
 
-![alt text](serverless_todo_api_uml.png)
+![UML](assets/serverless_todo_api_uml.png)
 
 ---
 
 ## 🚀 Features
 
-- `POST /todo` → Creates a new todo item
-- `GET /todos` → Returns all todos
-- (Optional: `DELETE`, `UPDATE` … extendable)
+- `POST / GET / Delete / Update ` route created
 - DynamoDB stores: `id`, `title`, `done`, `createdAt`
 
 ---
