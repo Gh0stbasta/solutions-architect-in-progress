@@ -12,7 +12,7 @@ This project is a simple yet fully functional **serverless Todo API**, built wit
 ```mermaid
 graph TB
   Client[Client]
-  APIGW[API Gateway]
+  APIGW[API Gateway <br> route aws/todos]
   Lambda[AWS Lambda<br>todo-handler.js]
   Dynamo[DynamoDB<br>Todos Table]
   Logs[CloudWatch<br>Logs & Errors]
@@ -27,7 +27,7 @@ graph TB
 
 ## 🚀 Features
 
-- `POST / GET / Delete / Update ` route created
+- `POST / GET / Delete / Update` route created
 - DynamoDB stores: `id`, `title`, `done`, `createdAt`
 
 ---
@@ -50,7 +50,6 @@ graph TB
 - Deploying AWS Lambda with Node.js
 - Using `aws-sdk` and `uuid` properly
 - Leveraging DynamoDB as a serverless datastore
-- Handling JSON input/output and errors
 - Debugging via CloudWatch Logs
 - Detecting and fixing ZIP deployment issues 😄
 
@@ -61,10 +60,6 @@ graph TB
 This project is part of my **SkillPilot** learning journey.  
 Fueled by coffee, logs, and endless debugging ✨  
 **GitHub: [@Gh0stbasta](https://github.com/Gh0stbasta)**
-
----
-
-> “I don’t write servers – I throw functions into the cloud.” ☁️
 
 After hours of debugging in AWS, my AI calmly replied:
 
