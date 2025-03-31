@@ -10,7 +10,7 @@ This project is a simple yet fully functional **serverless Todo API**, built wit
 
 ## 📊 Architecture Diagram
 
-![Serverless Todo API Architecture](05_projects/serverless_todo/serverless_todo_api_uml.png)
+![alt text](serverless_todo_api_uml.png)
 
 ---
 
