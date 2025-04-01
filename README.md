@@ -19,7 +19,7 @@ skillpilot/
 ├── 03_traditional/             # → EC2-based apps, classic infra
 ├── 04_typescript/              # → TS concepts, utility types
 ├── 05_projects/                # → Mini-projects & prototypes
-├── .06_doku_review/            # → Notes, reflections, diagrams
+├── 06_doku_review/             # → Notes, reflections, diagrams
 └── README.md
 ```
 
@@ -30,6 +30,7 @@ skillpilot/
 > "You don’t need to know everything. You just need to keep learning."
 
 My learning is:
+
 - **Modular** – small units I can build on
 - **Project-based** – not tutorial-driven
 - **Minimalistic** – focused on depth, not overwhelm
