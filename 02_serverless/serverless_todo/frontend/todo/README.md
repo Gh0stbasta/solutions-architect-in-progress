@@ -23,10 +23,10 @@ graph TD
 ### Todo: Issue Board
 
 #### Active Tasks
-- [ ] **Fix items not showing** 
+
+- [ ] **First thing: Use Env**
+- [ ] **Fix items not showing**
 
 #### Done Tasks
+
 - [x] **Created Structure and connected API Gateway**
-
-
-

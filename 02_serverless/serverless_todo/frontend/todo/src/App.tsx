@@ -7,7 +7,7 @@ const App = () => {
   const [newTodo, setNewTodo] = useState<string>("");
   const [filter, setFilter] = useState<"all" | "active" | "done">("all");
 
-  const API = "env";
+  const API = import.meta.env.VITE_API_URL;
 
   // Fetch data from DynamoDB via API Gateway
   useEffect(() => {
@@ -17,7 +17,6 @@ const App = () => {
         const data = await response.json();
         setTodos(data);
         console.log(data);
-        console.log(todos);
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
@@ -31,7 +30,7 @@ const App = () => {
 
     const todo: Todo = {
       id: uuidv4(),
-      text: newTodo,
+      title: newTodo,
       done: false,
       createdAt: new Date().toISOString(),
     };
@@ -52,7 +51,7 @@ const App = () => {
   // Delete todo function
   const deleteTodo = async (id: string) => {
     try {
-      await fetch(`${API}/todos/${id}`, {
+      await fetch(`${API}/todo/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -91,7 +90,7 @@ const App = () => {
   return (
     <div>
       <h1>Todo App</h1>
-      <div>
+      <div className="input-form">
         <input
           type="text"
           value={newTodo}
@@ -100,7 +99,7 @@ const App = () => {
         />
         <button onClick={addTodo}>Add</button>
       </div>
-      <div>
+      <div className="filter-row">
         <button onClick={() => setFilter("all")}>All</button>
         <button onClick={() => setFilter("active")}>Active</button>
         <button onClick={() => setFilter("done")}>Done</button>
@@ -113,7 +112,7 @@ const App = () => {
                 textDecoration: todo.done ? "line-through" : "none",
               }}
             >
-              {todo.text}
+              {todo.title}
             </span>
             <button onClick={() => toggleDone(todo.id)}>
               {todo.done ? "Undo" : "Done"}
