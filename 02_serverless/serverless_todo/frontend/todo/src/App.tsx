@@ -7,7 +7,7 @@ const App = () => {
   const [newTodo, setNewTodo] = useState<string>("");
   const [filter, setFilter] = useState<"all" | "active" | "done">("all");
 
-  const API = "https://ly0wbnn0f3.execute-api.eu-central-1.amazonaws.com";
+  const API = "env";
 
   // Fetch data from DynamoDB via API Gateway
   useEffect(() => {
