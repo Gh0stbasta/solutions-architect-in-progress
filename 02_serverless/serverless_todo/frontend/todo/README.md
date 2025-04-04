@@ -20,13 +20,23 @@ graph TD
    B -->|Displays Task| A
 ```
 
+
+Deployed in KW14 2025.
+Stack:
+- React TS Frontend over AWS Amplify
+- AWS API Gateway
+- AWS Lambda
+- AWS Dynamo DB
+
+<img src="src/assets/amplify.png" alt="Amplify Logo" width="200" />
+<img src="src/assets/api.png" alt="API Logo" width="300" />
+<img src="src/assets/dynamodb.png" alt="API Logo" width="400" />
+<img src="src/assets/lambda.png" alt="API Logo" width="400" />
+
 ### Todo: Issue Board
 
 #### Active Tasks
 
-- [ ] **First thing: Use Env**
-- [ ] **Fix items not showing**
-
 #### Done Tasks
 
-- [x] **Created Structure and connected API Gateway**
+- [x] **all done**
