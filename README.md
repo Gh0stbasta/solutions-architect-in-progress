@@ -13,7 +13,7 @@ Welcome aboard! This repository documents my personal learning path towards beco
 ## 🧱 Repository Structure
 
 ```bash
-skillpilot/
+solutions-architect-in-progress/
 ├── 01_aws_basics/              # → IAM, EC2, S3 fundamentals
 ├── 02_serverless/              # → Lambda, API Gateway, DynamoDB
 ├── 03_traditional/             # → EC2-based apps, classic infra
