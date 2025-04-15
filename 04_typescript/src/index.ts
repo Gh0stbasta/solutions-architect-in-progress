@@ -1,7 +1,8 @@
-type Joke = {
+type Joke = { 
   setup: string;
   punchline: string;
 };
+
 
 async function getJoke(): Promise<string> {
   try {
