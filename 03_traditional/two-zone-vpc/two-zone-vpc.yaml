@@ -1,0 +1,92 @@
+# Die version der Templatecodierung die wir verwenden. AWS hat nur eine gemacht und nie geändert ... war gut
+AWSTemplateFormatVersion: "2010-09-09"
+# Hier nur ne kurze Beschreibung, was der Stack macht
+Description: MacGyver in two worlds
+
+# Ab hier beschreiben wir die Ressourcen, die wir deployen wollen
+Resources:
+  # You guessed it: Wir wollen eine VPC machen. Dafür müsen wir den Typ der Ressouce nochmal definieren
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      # Der CIDR Block beschreibt die Größe des VPCs. Hier stehen uns die letzten beiden nullen von 0-255 zur verfügung
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: MaciMacMacGyver
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      # Das VPC in das das Subnet reinsoll wird hier gleich noch mal mit !Ref verlinkt. So müssen wir nicht auf die ARN warten
+      VpcId: !Ref VPC
+      # Mit dem Präfix 24 steht uns nur noch die letzte 0 für Hosts zur Verfügung, was theoretisch 255 wären, AWS nimmt jedoch 5 gleich mal weg
+      CidrBlock: 10.0.1.0/24
+      # Hier gehts dann um die Availability Zone ... nicht verwechseln mit Region, dann klappts auch ;)
+      AvailabilityZone: eu-central-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: macGyverPublic
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: eu-central-1b
+      Tags:
+        - Key: Name
+          Value: macGyverPrivate
+
+  # Damit wir aus dem Public mit dem Internet kommunizieren können
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: InternetGateway
+
+  # und das gateway packen wir jetzt an die VPC ran
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # eine routing tabelle dazu, die aber nichts macht
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: PublicRouteTable
+
+  # Eine route fürs Internet anlegen. Alles was nach draußen geht, soll übers Internet Gateway geleitet werden
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  # Das ist sozusagen der verbinder zwischen subnet und routing table. Dazu muss man eine eigene Ressourc erstellen
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+Outputs:
+  VPCId:
+    Description: VPC ID
+    Value: !Ref VPC
+  PublicSubnetId:
+    Description: Public Subnet ID
+    Value: !Ref PublicSubnet
+  PrivateSubnetId:
+    Description: Private Subnet ID
+    Value: !Ref PrivateSubnet
