@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template to create an EC2 instance with Ubuntu (with default parameter values).
+
+Parameters:
+  VpcId:
+    Description: The ID of the VPC
+    Type: AWS::EC2::VPC::Id
+    Default: #set id here
+  SubnetId:
+    Description: The ID of the Subnet
+    Type: AWS::EC2::Subnet::Id
+    Default: #set id here
+  ImageId:
+    Description: The AMI ID for the Ubuntu instance
+    Type: AWS::EC2::Image::Id
+    Default: #set id here
+
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: !Ref ImageId
+      KeyName: #set PairName here
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      Tags:
+        - Key: Name
+          Value: UbuntuEC2Instance
+
+Outputs:
+  InstanceId:
+    Description: The Instance ID of the EC2 instance
+    Value: !Ref EC2Instance
