@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: CloudFormation template to create an EC2 instance with Ubuntu (with default parameter values).
 
-Parameters:
+Parameters: # Die Parameter werden in der CLI eingegeben oder hier über default werte angegeben. vorsicht beim Upload in die cloud ;)
   VpcId:
     Description: The ID of the VPC
     Type: AWS::EC2::VPC::Id
@@ -16,7 +16,7 @@ Parameters:
     Default: #set id here
 
 Resources:
-  InstanceSecurityGroup:
+  InstanceSecurityGroup: # ne security group für die folgende Instanz
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable SSH access
@@ -25,13 +25,13 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 0.0.0.0/0
+          CidrIp: 0.0.0.0/0 # zugriff weltweit -- evtl. nicht so cool
 
-  EC2Instance:
+  EC2Instance: # hier kommt die eigentliche instanz
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      ImageId: !Ref ImageId
+      ImageId: !Ref ImageId # muss tatsächlich in der region verfügbar sein, sonst gibts nen rollback
       KeyName: #set PairName here
       SubnetId: !Ref SubnetId
       SecurityGroupIds:
@@ -40,7 +40,7 @@ Resources:
         - Key: Name
           Value: UbuntuEC2Instance
 
-Outputs:
+Outputs: # schmeißt dir das was du willst in die Konsole ;)
   InstanceId:
     Description: The Instance ID of the EC2 instance
     Value: !Ref EC2Instance

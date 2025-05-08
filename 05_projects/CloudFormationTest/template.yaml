@@ -1,77 +1,77 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Description: Einfaches API + Lambda Projekt
+AWSTemplateFormatVersion: '2010-09-09' # Gibt die Version des CloudFormation-Templates an.
+Description: Einfaches API + Lambda Projekt # Beschreibung des Templates.
 
-Resources:
-  HelloFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: HelloFunction
-      Runtime: nodejs18.x
-      Handler: index.handler
-      Code:
-        ZipFile: |
-          exports.handler = async (event) => {
-            return {
-              statusCode: 200,
-              body: JSON.stringify({ message: "Hallo von Lambda!" })
+Resources: # Definiert die Ressourcen, die in diesem Template erstellt werden.
+  HelloFunction: # Lambda-Funktion namens "HelloFunction".
+    Type: AWS::Lambda::Function # Typ der Ressource: Lambda-Funktion.
+    Properties: # Eigenschaften der Lambda-Funktion.
+      FunctionName: HelloFunction # Name der Lambda-Funktion.
+      Runtime: nodejs18.x # Laufzeitumgebung der Lambda-Funktion (Node.js 18.x).
+      Handler: index.handler # Einstiegspunkt der Lambda-Funktion.
+      Code: # Der Code der Lambda-Funktion.
+        ZipFile: | # Inline-Code der Lambda-Funktion.
+          exports.handler = async (event) => { # Exportierte Handler-Funktion.
+            return { # Rückgabe der Antwort.
+              statusCode: 200, # HTTP-Statuscode 200 (OK).
+              body: JSON.stringify({ message: "Hallo von Lambda!" }) # Antworttext.
             };
           };
-      Role: !GetAtt LambdaExecutionRole.Arn
+      Role: !GetAtt LambdaExecutionRole.Arn # IAM-Rolle, die der Lambda-Funktion zugewiesen wird.
 
-  LambdaExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: HelloLambdaRole
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: AllowLogs
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: "*"
+  LambdaExecutionRole: # IAM-Rolle für die Lambda-Funktion.
+    Type: AWS::IAM::Role # Typ der Ressource: IAM-Rolle.
+    Properties: # Eigenschaften der IAM-Rolle.
+      RoleName: HelloLambdaRole # Name der IAM-Rolle.
+      AssumeRolePolicyDocument: # Richtlinie, die definiert, wer diese Rolle übernehmen darf.
+        Version: '2012-10-17' # Version des Richtliniendokuments.
+        Statement: # Richtlinienaussagen.
+          - Effect: Allow # Erlaubt die Übernahme der Rolle.
+            Principal: # Entität, die die Rolle übernehmen darf.
+              Service: lambda.amazonaws.com # Lambda-Dienst darf die Rolle übernehmen.
+            Action: sts:AssumeRole # Aktion: Rolle übernehmen.
+      Policies: # Richtlinien, die der Rolle zugewiesen werden.
+        - PolicyName: AllowLogs # Name der Richtlinie.
+          PolicyDocument: # Dokument der Richtlinie.
+            Version: '2012-10-17' # Version des Richtliniendokuments.
+            Statement: # Richtlinienaussagen.
+              - Effect: Allow # Erlaubt die angegebenen Aktionen.
+                Action: # Aktionen, die erlaubt sind.
+                  - logs:CreateLogGroup # Erstellen einer Log-Gruppe.
+                  - logs:CreateLogStream # Erstellen eines Log-Streams.
+                  - logs:PutLogEvents # Schreiben von Log-Ereignissen.
+                Resource: "*" # Gilt für alle Ressourcen.
 
-  ApiGateway:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: HelloApi
+  ApiGateway: # API Gateway für die REST-API.
+    Type: AWS::ApiGateway::RestApi # Typ der Ressource: REST-API.
+    Properties: # Eigenschaften des API Gateways.
+      Name: HelloApi # Name der API.
 
-  HelloResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      ParentId: !GetAtt ApiGateway.RootResourceId
-      PathPart: hello
-      RestApiId: !Ref ApiGateway
+  HelloResource: # Ressource im API Gateway.
+    Type: AWS::ApiGateway::Resource # Typ der Ressource: API Gateway-Ressource.
+    Properties: # Eigenschaften der Ressource.
+      ParentId: !GetAtt ApiGateway.RootResourceId # ID der übergeordneten Ressource (Root).
+      PathPart: hello # Pfadsegment der Ressource.
+      RestApiId: !Ref ApiGateway # ID der zugehörigen API.
 
-  HelloMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: GET
-      ResourceId: !Ref HelloResource
-      RestApiId: !Ref ApiGateway
-      AuthorizationType: NONE
-      Integration:
-        Type: AWS_PROXY
-        IntegrationHttpMethod: POST
-        Uri: !Sub
-          - arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations
-          - Region: !Ref "AWS::Region"
-            LambdaArn: !GetAtt HelloFunction.Arn
+  HelloMethod: # HTTP-Methode für die Ressource.
+    Type: AWS::ApiGateway::Method # Typ der Ressource: API Gateway-Methode.
+    Properties: # Eigenschaften der Methode.
+      HttpMethod: GET # HTTP-Methode (GET).
+      ResourceId: !Ref HelloResource # ID der Ressource.
+      RestApiId: !Ref ApiGateway # ID der API.
+      AuthorizationType: NONE # Keine Autorisierung erforderlich.
+      Integration: # Integration der Methode.
+        Type: AWS_PROXY # Proxy-Integration mit Lambda.
+        IntegrationHttpMethod: POST # HTTP-Methode für die Integration (POST).
+        Uri: !Sub # URI der Integration.
+          - arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations # URI-Format.
+          - Region: !Ref "AWS::Region" # Region der API.
+            LambdaArn: !GetAtt HelloFunction.Arn # ARN der Lambda-Funktion.
 
-  LambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !Ref HelloFunction
-      Action: lambda:InvokeFunction
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/hello
+  LambdaInvokePermission: # Berechtigung für das API Gateway, die Lambda-Funktion aufzurufen.
+    Type: AWS::Lambda::Permission # Typ der Ressource: Lambda-Berechtigung.
+    Properties: # Eigenschaften der Berechtigung.
+      FunctionName: !Ref HelloFunction # Name der Lambda-Funktion.
+      Action: lambda:InvokeFunction # Aktion: Lambda-Funktion aufrufen.
+      Principal: apigateway.amazonaws.com # Entität: API Gateway.
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/hello # ARN der API Gateway-Ressource.
